@@ -1,0 +1,208 @@
+﻿@model HR.PresentationsModel.Dots.Employee.EmployeeFormDto
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="modal fade" id="empform" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog mw-550px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div id="employeeform" class="  modal-body scroll-y ">
+                <!--begin::Heading-->
+
+                <form>
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>Employee</h4>
+                        <hr />
+                        <div id="emp_id" hidden></div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BirthGovernorateId, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.BirthGovernorateId, null, htmlAttributes: new { @class = "form-control", @onchange = "onGovChange()" })
+                                @Html.ValidationMessageFor(model => model.BirthGovernorateId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BirthNeighborhoodId, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.BirthNeighborhoodId, null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BirthNeighborhoodId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CareerFieldId, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.CareerFieldId, null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CareerFieldId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CompanyJobId, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.CompanyJobId, null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CompanyJobId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.QualificationsSelected, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(m => m.QualificationsSelected, new SelectList(ViewBag.Qualification, "ID", "Name"), new { @multiple = "multiple", @placeholder = "Please select country", @class = "form-select form-select-solid", @data_control = "select2" })
+                                @Html.ValidationMessageFor(model => model.QualificationsSelected, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group btn">
+                            <div class="col-md-offset-5 col-md-10">
+                                <input type="submit" value="حفظ" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<script>
+function onGovChange() {
+
+    var govid = document.getElementById('BirthGovernorateId').value;
+
+
+    if (govid != "Please Select") {
+        $.ajax({
+            url: "/Employees/GovChanged",
+            data: { id: govid }, //parameters go here in object literal form
+            type: 'GET',
+            datatype: 'json',
+            success: function (data) {
+                //alert('got here with data');
+
+                $("#BirthNeighborhoodId").empty();
+                var selOpts = "";
+                $.each(data, function (k, v) {
+
+                    debugger
+                    selOpts += "<option value='" + v.ID + "'>" + v.Name; + "</option>";
+                });
+                $('#BirthNeighborhoodId').append(selOpts);
+            },
+            error: function () {
+                alert('something bad happened');
+            }
+        });
+
+    } else {
+        $('#BirthNeighborhoodId').empty();
+
+        $('#BirthNeighborhoodId').prepend($('<option>Please Select</option>')).prop("selectedIndex", 0);
+       }
+    }
+    $("#employeeform form").submit(function (event) {
+        event.preventDefault();
+        if ($("#emp_id").val()=="") {
+            $.ajax({
+                url: '/Employees/Create/',
+                data: { "Name": $("#Name").val(), "BirthGovernorateId": $("#BirthGovernorateId").val(), "BirthNeighborhoodId": $("#BirthNeighborhoodId").val(), "CareerFieldId": $("#CareerFieldId").val(), "Address": $("#Address").val(), "CompanyJobId": $("#CompanyJobId").val(), "QualificationsSelected": $("#QualificationsSelected").val() }, //parameters go here in object literal form
+                type: 'POST',
+                datatype: 'json',
+                success: function (data) {
+                    if (data.success) {
+
+
+                        location.reload()
+                    } else {
+
+
+
+                    }
+
+
+                },
+                error: function () {
+
+
+
+                }
+            });
+        } else {
+
+            $.ajax({
+                url: '/Employees/Edit/',
+                data: { "ID": $("#emp_id").val(), "Name": $("#Name").val(), "BirthGovernorateId": $("#BirthGovernorateId").val(), "BirthNeighborhoodId": $("#BirthNeighborhoodId").val(), "CareerFieldId": $("#CareerFieldId").val(), "Address": $("#Address").val(), "CompanyJobId": $("#CompanyJobId").val(), "QualificationsSelected": $("#QualificationsSelected").val() }, //parameters go here in object literal form
+                type: 'POST',
+                datatype: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        $("#Name").val(null);
+                        $("#BirthGovernorateId").val(1);
+                        $("#BirthNeighborhoodId").val(1);
+                        $("#CareerFieldId").val(1);
+                        $("#Address").val(null);
+                        $("#CompanyJobId").val(1);
+                        $("#QualificationsSelected").val(null).trigger('change');
+                        $("#emp_id").val(null);
+                        location.reload();
+                    } else {
+
+
+
+                    }
+
+
+                },
+                error: function () {
+
+
+
+                }
+            });
+        }
+
+    });
+
+</script>
