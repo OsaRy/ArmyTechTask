@@ -11,8 +11,12 @@ namespace HR.PresentationsModel.Dots.Neighborhood
     {
         public int ID { get; set; }
         [Display(Name = "Neighborhood")]
+        [Required]
+
         public string Name { get; set; }
         [Display(Name = "Governorate")]
+        [Required]
+
         public int GovernorateId { get; set; }
 
     }

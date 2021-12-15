@@ -11,7 +11,8 @@ namespace HR.PresentationsModel.Dots.Governorate
     {
         public int ID { get; set; }
         [Display(Name = "Governorate")]
-        [Required] public string Name { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
    
 }
