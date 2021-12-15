@@ -151,7 +151,7 @@ namespace ArmyTechTask.Controllers
             try
             {
                 var obj = await _unitOfWork.Neighborhood.GetAsync(id);
-                await _unitOfWork.Neighborhood.RemoveAsync(AutoMapper.Mapper.Map<Neighborhood>(obj));
+                await _unitOfWork.Neighborhood.RemoveAsync(id);
                 _unitOfWork.Save();
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }

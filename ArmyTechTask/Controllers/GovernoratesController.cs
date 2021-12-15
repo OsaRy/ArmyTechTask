@@ -144,7 +144,7 @@ namespace ArmyTechTask.Controllers
                 var obj = await _unitOfWork.Governorate.GetAsync(id);
                 var nei_list = await _unitOfWork.Neighborhood.GetAllAsync(x => x.GovernorateId == id);
                 await _unitOfWork.Neighborhood.RemoveRangeAsync(nei_list);
-                await _unitOfWork.Governorate.RemoveAsync(AutoMapper.Mapper.Map<Governorate>(obj));
+                await _unitOfWork.Governorate.RemoveAsync(id);
                 _unitOfWork.Save();
 
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
