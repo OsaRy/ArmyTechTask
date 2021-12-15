@@ -163,7 +163,6 @@
     <Compile Include="Controllers\NeighborhoodsController.cs" />
     <Compile Include="Mapper\AutoMapperProfile.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,7 +212,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Employees\Form.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Neighborhoods\Create.cshtml" />
     <Content Include="Views\Neighborhoods\Delete.cshtml" />
     <Content Include="Views\Neighborhoods\Details.cshtml" />

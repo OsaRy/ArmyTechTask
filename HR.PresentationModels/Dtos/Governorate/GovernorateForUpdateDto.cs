@@ -12,6 +12,7 @@ namespace HR.PresentationsModel.Dots.Governorate
         public int ID { get; set; }
         [Display(Name = "Governorate")]
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
     }
    

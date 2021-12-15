@@ -10,10 +10,12 @@ namespace HR.PresentationsModel.Dots.Employee
     public class EmployeeForCreateDto
     {
         [Required]
+        [MaxLength(50)]
         [Display(Name = "Employee Name")]
         public string Name { get; set; }
         [Display(Name = "Governorate")]
         [Required]
+        
 
         public int BirthGovernorateId { get; set; }
         [Display(Name = "Neighborhood")]
@@ -26,6 +28,7 @@ namespace HR.PresentationsModel.Dots.Employee
         public int CareerFieldId { get; set; }
         [Display(Name = "Address")]
         [Required]
+        [MaxLength(500)]
 
         public string Address { get; set; }
         [Display(Name = "Company Job")]

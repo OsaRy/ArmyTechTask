@@ -26,32 +26,53 @@ namespace ArmyTechTask.Controllers
         // GET: NeighborhoodDtoes
         public ActionResult Index()
         {
-            var obj = _unitOfWork.Neighborhood.GetAll();
+            try
+            {
+                var obj = _unitOfWork.Neighborhood.GetAll();
 
-            return View(AutoMapper.Mapper.Map<List<NeighborhoodDto>>(obj));
+                return View(AutoMapper.Mapper.Map<List<NeighborhoodDto>>(obj));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         // GET: NeighborhoodDtoes/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var obj = await _unitOfWork.Neighborhood.GetAsync(id);
+                if (obj == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(AutoMapper.Mapper.Map<NeighborhoodDto>(obj));
             }
-            var obj = await _unitOfWork.Neighborhood.GetAsync(id);
-            if (obj == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                return Json(new { error = ex.Message });
             }
-            return View(AutoMapper.Mapper.Map<NeighborhoodDto>(obj));
         }
 
         // GET: NeighborhoodDtoes/Create
         public ActionResult Create()
         {
-            ViewBag.GovernorateId = new SelectList(_unitOfWork.Governorate.GetAll(), "ID", "Name");
+            try
+            {
+                ViewBag.GovernorateId = new SelectList(_unitOfWork.Governorate.GetAll(), "ID", "Name");
 
-            return View();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         // POST: NeighborhoodDtoes/Create
@@ -61,27 +82,41 @@ namespace ArmyTechTask.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(NeighborhoodForCreateDto neighborhoodDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _unitOfWork.Neighborhood.AddAsync(AutoMapper.Mapper.Map<Neighborhood>(neighborhoodDto)) ;
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    await _unitOfWork.Neighborhood.AddAsync(AutoMapper.Mapper.Map<Neighborhood>(neighborhoodDto));
+                    _unitOfWork.Save();
+                    return RedirectToAction("Index");
+                }
 
-            return View(neighborhoodDto);
+                return View(neighborhoodDto);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         // GET: NeighborhoodDtoes/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            ViewBag.GovernorateId = new SelectList(_unitOfWork.Governorate.GetAll(), "ID", "Name");
-
-            var obj = await _unitOfWork.Neighborhood.GetAsync(id);
-            if (obj == null)
+            try
             {
-                return HttpNotFound();
+                ViewBag.GovernorateId = new SelectList(_unitOfWork.Governorate.GetAll(), "ID", "Name");
+
+                var obj = await _unitOfWork.Neighborhood.GetAsync(id);
+                if (obj == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(AutoMapper.Mapper.Map<NeighborhoodForUpdateDto>(obj));
             }
-            return View(AutoMapper.Mapper.Map<NeighborhoodForUpdateDto>(obj));
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         // POST: NeighborhoodDtoes/Edit/5
@@ -91,13 +126,20 @@ namespace ArmyTechTask.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(NeighborhoodForUpdateDto neighborhoodDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _unitOfWork.Neighborhood.update(AutoMapper.Mapper.Map<Neighborhood>(neighborhoodDto));
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    _unitOfWork.Neighborhood.update(AutoMapper.Mapper.Map<Neighborhood>(neighborhoodDto));
+                    _unitOfWork.Save();
+                    return RedirectToAction("Index");
+                }
+                return View(neighborhoodDto);
             }
-            return View(neighborhoodDto);
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
        
@@ -106,10 +148,17 @@ namespace ArmyTechTask.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(int id)
         {
-            var obj = await _unitOfWork.Neighborhood.GetAsync(id);
-           await _unitOfWork.Neighborhood.RemoveAsync(AutoMapper.Mapper.Map<Neighborhood>(obj));
-            _unitOfWork.Save();
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var obj = await _unitOfWork.Neighborhood.GetAsync(id);
+                await _unitOfWork.Neighborhood.RemoveAsync(AutoMapper.Mapper.Map<Neighborhood>(obj));
+                _unitOfWork.Save();
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
 

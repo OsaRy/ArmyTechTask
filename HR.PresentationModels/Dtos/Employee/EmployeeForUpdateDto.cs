@@ -11,6 +11,7 @@ namespace HR.PresentationsModel.Dots.Employee
     {
         public int ID { get; set; }
         [Required]
+        [MaxLength(50)]
 
         public string Name { get; set; }
         [Required]
@@ -23,6 +24,7 @@ namespace HR.PresentationsModel.Dots.Employee
 
         public int CareerFieldId { get; set; }
         [Required]
+        [MaxLength(500)]
 
         public string Address { get; set; }
         [Required]
