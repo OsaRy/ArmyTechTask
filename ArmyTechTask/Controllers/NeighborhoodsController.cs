@@ -150,6 +150,13 @@ namespace ArmyTechTask.Controllers
         {
             try
             {
+                var emp_list = await _unitOfWork.Employee.GetAllAsync(x => x.BirthNeighborhoodId == id);
+
+                if (emp_list.Count() > 0)
+                {
+                    return Json(new { success = false, message = "Failed, There is Employees Related with this Neighborhood" }, JsonRequestBehavior.AllowGet);
+
+                }
                 var obj = await _unitOfWork.Neighborhood.GetAsync(id);
                 await _unitOfWork.Neighborhood.RemoveAsync(id);
                 _unitOfWork.Save();
